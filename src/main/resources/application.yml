@@ -1,0 +1,13 @@
+
+spring:
+  application:
+    name: locadora01
+  datasource:
+    url: jdbc:mysql://localhost:3306/locadora?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&createDatabaseIfNotExist=true
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect

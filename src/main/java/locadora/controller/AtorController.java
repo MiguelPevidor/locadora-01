@@ -19,26 +19,34 @@ public class AtorController {
 
     private final AtorService atorService;
 
-    @GetMapping
+    @GetMapping("/listarAtores")
     public ResponseEntity<?> listarAtores(){
        return ResponseEntity.ok().body(atorService.listar());
     }
 
-    @PostMapping
+    @PostMapping("/salvarAtor")
     public ResponseEntity<?> salvarAtor(@RequestBody Ator ator){
         atorService.salvar(ator);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping()
+    @PutMapping("/editarAtor")
     public ResponseEntity<?> atualizarAtor(@RequestBody Ator ator){
         atorService.atualizar(ator);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletarAtor/{id}")
     public ResponseEntity<?> deletarAtor(@PathVariable Long id){
         atorService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/buscarAtor/{id}")
+    public ResponseEntity<Ator> buscarAtorPorId(@PathVariable Long id) {
+        Ator ator = atorService.buscarPorId(id); // Chama o serviço para buscar pelo ID
+        return ResponseEntity.ok().body(ator);
+    }
+
+
 }

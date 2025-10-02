@@ -1,5 +1,6 @@
 package locadora.service;
 
+import locadora.domain.Ator;
 import locadora.domain.Classe;
 import locadora.repository.ClasseRepository;
 import locadora.repository.ClasseRepository;
@@ -35,4 +36,11 @@ public class ClasseService {
     public void deletar(Long id){
         repository.deleteById(id);
     }
+
+
+    public Classe buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Classe não encontrado"));  // Lança uma exceção se não encontrar o ator
+    }
+
 }

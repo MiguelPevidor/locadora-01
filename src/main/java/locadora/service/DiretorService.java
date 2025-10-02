@@ -1,5 +1,6 @@
 package locadora.service;
 
+import locadora.domain.Ator;
 import locadora.domain.Diretor;
 import locadora.repository.DiretorRepository;
 import locadora.repository.DiretorRepository;
@@ -34,5 +35,13 @@ public class DiretorService {
 
     public void deletar(Long id){
         repository.deleteById(id);
+    }
+
+
+
+
+    public Diretor buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Diretor não encontrado"));  // Lança uma exceção se não encontrar o ator
     }
 }

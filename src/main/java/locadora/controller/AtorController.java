@@ -2,6 +2,7 @@ package locadora.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import locadora.domain.Ator;
+import locadora.domain.dto.AtorDto;
 import locadora.service.AtorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,13 @@ public class AtorController {
     }
 
     @PostMapping("/salvarAtor")
-    public ResponseEntity<?> salvarAtor(@RequestBody Ator ator){
+    public ResponseEntity<?> salvarAtor(@RequestBody AtorDto ator){
         atorService.salvar(ator);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/editarAtor")
-    public ResponseEntity<?> atualizarAtor(@RequestBody Ator ator){
+    public ResponseEntity<?> atualizarAtor(@RequestBody AtorDto ator){
         atorService.atualizar(ator);
         return ResponseEntity.ok().build();
     }
@@ -43,8 +44,8 @@ public class AtorController {
     }
 
     @GetMapping("/buscarAtor/{id}")
-    public ResponseEntity<Ator> buscarAtorPorId(@PathVariable Long id) {
-        Ator ator = atorService.buscarPorId(id); // Chama o serviço para buscar pelo ID
+    public ResponseEntity<AtorDto> buscarAtorPorId(@PathVariable Long id) {
+        AtorDto ator = atorService.buscarPorId(id); // Chama o serviço para buscar pelo ID
         return ResponseEntity.ok().body(ator);
     }
 

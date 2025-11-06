@@ -1,15 +1,14 @@
 package locadora.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,4 +22,7 @@ public class Classe {
     private String nome;
     private Double valor;
     private LocalDate prazoDevolucao;
+
+    @OneToMany(mappedBy = "classe" )
+    private List<Titulo> titulos = new ArrayList<>();
 }

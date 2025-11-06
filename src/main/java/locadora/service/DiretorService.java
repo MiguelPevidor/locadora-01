@@ -2,6 +2,8 @@ package locadora.service;
 
 import locadora.domain.Ator;
 import locadora.domain.Diretor;
+import locadora.domain.dto.DiretorDto;
+import locadora.mapper.DiretorMapper;
 import locadora.repository.DiretorRepository;
 import locadora.repository.DiretorRepository;
 import lombok.AllArgsConstructor;
@@ -14,23 +16,24 @@ import java.util.List;
 public class DiretorService {
 
     private final DiretorRepository repository;
+    private final DiretorMapper mapper;
 
-    public List<Diretor> listar(){
-        return repository.findAll();
+    public List<DiretorDto> listar(){
+        return mapper.toDtoList(repository.findAll());
     }
 
-    public void salvar(Diretor Diretor){
-        repository.save(Diretor);
+    public void salvar(DiretorDto diretor){
+        repository.save(mapper.toEntity(diretor));
     }
 
-    public void atualizar(Diretor Diretor){
-        if(Diretor.getId() == null) {
+    public void atualizar(DiretorDto diretor){
+        if(diretor.id() == null) {
             throw new RuntimeException("Id do Diretor não pode ser nulo");
         }
 
-        Diretor DiretorAtualizado = repository.findById(Diretor.getId()).orElseThrow(() -> new RuntimeException("Diretor não encontrado"));
+        Diretor DiretorAtualizado = repository.findById(diretor.id()).orElseThrow(() -> new RuntimeException("Diretor não encontrado"));
 
-        repository.save(Diretor);
+        repository.save(mapper.toEntity(diretor));
     }
 
     public void deletar(Long id){
@@ -40,8 +43,8 @@ public class DiretorService {
 
 
 
-    public Diretor buscarPorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Diretor não encontrado"));  // Lança uma exceção se não encontrar o ator
+    public DiretorDto buscarPorId(Long id) {
+        return mapper.toDto(repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Diretor não encontrado")));  // Lança uma exceção se não encontrar o ator
     }
 }

@@ -2,6 +2,8 @@ package locadora.service;
 
 import locadora.domain.Ator;
 import locadora.domain.Classe;
+import locadora.domain.dto.ClasseDto;
+import locadora.mapper.ClasseMapper;
 import locadora.repository.ClasseRepository;
 import locadora.repository.ClasseRepository;
 import lombok.AllArgsConstructor;
@@ -14,23 +16,24 @@ import java.util.List;
 public class ClasseService {
 
     private final ClasseRepository repository;
+    private final ClasseMapper mapper;
 
-    public List<Classe> listar(){
-        return repository.findAll();
+    public List<ClasseDto> listar(){
+        return mapper.toDtoList(repository.findAll());
     }
 
-    public void salvar(Classe Classe){
-        repository.save(Classe);
+    public void salvar(ClasseDto Classe){
+        repository.save(mapper.toEntity(Classe));
     }
 
-    public void atualizar(Classe Classe){
-        if(Classe.getId() == null) {
-            throw new RuntimeException("Id do Classe não pode ser nulo");
+    public void atualizar(ClasseDto classe){
+        if(classe.id() == null) {
+            throw new RuntimeException("Id da Classe não pode ser nulo");
         }
 
-        Classe ClasseAtualizado = repository.findById(Classe.getId()).orElseThrow(() -> new RuntimeException("Classe não encontrado"));
+        Classe ClasseAtualizado = repository.findById(classe.id()).orElseThrow(() -> new RuntimeException("Classe não encontrado"));
 
-        repository.save(Classe);
+        repository.save(mapper.toEntity(classe));
     }
 
     public void deletar(Long id){
@@ -38,9 +41,11 @@ public class ClasseService {
     }
 
 
-    public Classe buscarPorId(Long id) {
-        return repository.findById(id)
+    public ClasseDto buscarPorId(Long id) {
+        Classe classe = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Classe não encontrado"));  // Lança uma exceção se não encontrar o ator
+
+        return mapper.toDto(classe);
     }
 
 }

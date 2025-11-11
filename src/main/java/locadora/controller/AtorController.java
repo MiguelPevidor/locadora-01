@@ -1,8 +1,11 @@
 package locadora.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import locadora.domain.Ator;
-import locadora.domain.dto.AtorDto;
+import locadora.domain.dto.ator.AtorRequestDto;
+import locadora.domain.dto.ator.AtorResponseDto;
+import locadora.mapper.AtorMapper;
 import locadora.service.AtorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AtorController {
 
     private final AtorService atorService;
+    private final AtorMapper atorMapper;
 
     @GetMapping("/listarAtores")
     public ResponseEntity<?> listarAtores(){
@@ -26,14 +30,14 @@ public class AtorController {
     }
 
     @PostMapping("/salvarAtor")
-    public ResponseEntity<?> salvarAtor(@RequestBody AtorDto ator){
+    public ResponseEntity<?> salvarAtor(@RequestBody @Valid AtorRequestDto ator){
         atorService.salvar(ator);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/editarAtor")
-    public ResponseEntity<?> atualizarAtor(@RequestBody AtorDto ator){
-        atorService.atualizar(ator);
+    @PutMapping("{id}/editarAtor")
+    public ResponseEntity<?> atualizarAtor(@PathVariable Long id,@RequestBody @Valid AtorRequestDto ator){
+        atorService.atualizar(id,ator);
         return ResponseEntity.ok().build();
     }
 
@@ -44,9 +48,9 @@ public class AtorController {
     }
 
     @GetMapping("/buscarAtor/{id}")
-    public ResponseEntity<AtorDto> buscarAtorPorId(@PathVariable Long id) {
-        AtorDto ator = atorService.buscarPorId(id); // Chama o serviço para buscar pelo ID
-        return ResponseEntity.ok().body(ator);
+    public ResponseEntity<AtorResponseDto> buscarAtorPorId(@PathVariable Long id) {
+        Ator ator = atorService.buscarPorId(id); // Chama o serviço para buscar pelo ID
+        return ResponseEntity.ok().body(atorMapper.toDto(ator));
     }
 
 

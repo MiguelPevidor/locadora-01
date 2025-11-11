@@ -1,8 +1,10 @@
 package locadora.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import locadora.domain.dto.TituloDto;
-import locadora.domain.dto.TituloDto;
+import jakarta.validation.Valid;
+import locadora.domain.dto.titulo.TituloRequestDto;
+import locadora.domain.dto.titulo.TituloResponseDto;
+import locadora.mapper.TituloMapper;
 import locadora.service.TituloService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class TituloController {
 
     private final TituloService tituloService;
+    private final TituloMapper tituloMapper;
+
 
     @GetMapping("/listarTitulos")
     public ResponseEntity<?> listarTitulos(){
@@ -27,14 +31,14 @@ public class TituloController {
     }
 
     @PostMapping("/salvarTitulo")
-    public ResponseEntity<?> salvarTitulo(@RequestBody TituloDto titulo){
+    public ResponseEntity<?> salvarTitulo(@RequestBody @Valid TituloRequestDto titulo){
         tituloService.salvar(titulo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/editarTitulo")
-    public ResponseEntity<?> atualizarTitulo(@RequestBody TituloDto titulo){
-        tituloService.atualizar(titulo);
+    @PutMapping("{id}/editarTitulo")
+    public ResponseEntity<?> atualizarTitulo(@PathVariable Long id,@RequestBody @Valid TituloRequestDto titulo){
+        tituloService.atualizar(id,titulo);
         return ResponseEntity.ok().build();
     }
 
@@ -45,8 +49,8 @@ public class TituloController {
     }
 
     @GetMapping("/buscarTitulo/{id}")
-    public ResponseEntity<TituloDto> buscarTituloPorId(@PathVariable Long id) {
-        TituloDto titulo = tituloService.buscarPorId(id);
+    public ResponseEntity<TituloResponseDto> buscarTituloPorId(@PathVariable Long id) {
+        TituloResponseDto titulo = tituloMapper.toDto(tituloService.buscarPorId(id));
         return ResponseEntity.ok().body(titulo);
     }
 }

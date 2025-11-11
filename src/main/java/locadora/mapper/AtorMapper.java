@@ -1,11 +1,11 @@
 package locadora.mapper;
 
 import locadora.domain.Ator;
-import locadora.domain.Titulo;
-import locadora.domain.dto.AtorDto;
+import locadora.domain.dto.ator.AtorRequestDto;
+import locadora.domain.dto.ator.AtorResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -13,10 +13,12 @@ import java.util.List;
 public interface AtorMapper extends UtilMapper{
 
     @Mapping(target="titulos", ignore = true)
-    Ator toEntity(AtorDto dto);
+    Ator toEntity(AtorRequestDto dto);
 
-    @Mapping(target="titulos", source="titulos", qualifiedByName="tituloIdList")
-    AtorDto toDto(Ator entity);
+    AtorResponseDto toDto(Ator entity);
 
-    List<AtorDto> toDtoList(List<Ator> entities);
+    List<AtorResponseDto> toDtoList(List<Ator> entities);
+
+    @Mapping(target = "id", ignore = true)
+    void updateEntity(AtorRequestDto dto, @MappingTarget Ator entity);
 }

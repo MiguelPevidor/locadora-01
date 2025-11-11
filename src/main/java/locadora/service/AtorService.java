@@ -1,14 +1,16 @@
 package locadora.service;
 
 import locadora.domain.Ator;
-import locadora.domain.dto.AtorDto;
+import locadora.domain.Titulo;
+import locadora.domain.dto.ator.AtorRequestDto;
+import locadora.domain.dto.ator.AtorResponseDto;
+import locadora.handler.exceptions.EntidadeNaoEncontradaException;
 import locadora.mapper.AtorMapper;
 import locadora.repository.AtorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,24 +19,24 @@ public class AtorService {
 
     private final AtorRepository repository;
     private final AtorMapper mapper;
+    private final TituloService tituloService;
 
-    public List<AtorDto> listar(){
+    public List<AtorResponseDto> listar(){
         return mapper.toDtoList(repository.findAll());
     }
 
-    public void salvar(AtorDto ator){
+    public void salvar(AtorRequestDto ator){
 
-        repository.save(mapper.toEntity(ator));
+        //não precisa passar os titulos aqui, a vinculação será feita no serviço de títulos
+        Ator atorEntity = mapper.toEntity(ator);
+        repository.save(atorEntity);
     }
 
-    public void atualizar(AtorDto ator){
-        if(ator.id() == null) {
-            throw new RuntimeException("Id do ator não pode ser nulo");
-        }
+    public void atualizar(Long id, AtorRequestDto ator){
 
-        Ator atorAtualizado = repository.findById(ator.id()).orElseThrow(() -> new RuntimeException("Ator não encontrado"));
-
-        repository.save(mapper.toEntity(ator));
+        Ator atorEncontrado = buscarPorId(id);
+        mapper.updateEntity(ator, atorEncontrado);
+        repository.save(atorEncontrado);
     }
 
     public void deletar(Long id){
@@ -42,12 +44,21 @@ public class AtorService {
     }
 
 
-    public AtorDto buscarPorId(Long id) {
+    public Ator buscarPorId(Long id) {
         Ator ator = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ator não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Ator não encontrado"));
 
-        return mapper.toDto(ator);// Lança uma exceção se não encontrar o ator
+        return ator;// Lança uma exceção se não encontrar o ator
     }
 
 
+    public List<Ator> buscarAtoresPorIds(List<Long> idsAtores) {
+        List<Ator> atoresEncontrados = repository.findAllById(idsAtores);
+
+        if (atoresEncontrados.size() != idsAtores.size()) {
+            throw new EntidadeNaoEncontradaException("Um ou mais atores não foram encontrados");
+        }
+
+        return atoresEncontrados;
+    }
 }

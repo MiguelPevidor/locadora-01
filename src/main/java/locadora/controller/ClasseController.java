@@ -1,9 +1,10 @@
 package locadora.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import locadora.domain.Ator;
-import locadora.domain.Classe;
-import locadora.domain.dto.ClasseDto;
+import jakarta.validation.Valid;
+import locadora.domain.dto.classe.ClasseRequestDto;
+import locadora.domain.dto.classe.ClasseResponseDto;
+import locadora.mapper.ClasseMapper;
 import locadora.service.ClasseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 )
 public class ClasseController {
     private final ClasseService classeService;
+    private final ClasseMapper classeMapper;
 
     @GetMapping("/listarClasses")
     public ResponseEntity<?> listarClasses(){
@@ -26,14 +28,14 @@ public class ClasseController {
     }
 
     @PostMapping("/salvarClasse")
-    public ResponseEntity<?> salvarClasse(@RequestBody ClasseDto classe){
+    public ResponseEntity<?> salvarClasse(@RequestBody @Valid ClasseRequestDto classe){
         classeService.salvar(classe);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/editarClasse")
-    public ResponseEntity<?> atualizarClasse(@RequestBody ClasseDto classe){
-        classeService.atualizar(classe);
+    @PutMapping("{id}/editarClasse")
+    public ResponseEntity<?> atualizarClasse(@PathVariable Long id,@RequestBody @Valid ClasseRequestDto classe){
+        classeService.atualizar(id,classe);
         return ResponseEntity.ok().build();
     }
 
@@ -44,8 +46,8 @@ public class ClasseController {
     }
 
     @GetMapping("/buscarclasse/{id}")
-    public ResponseEntity<ClasseDto> buscarAtorPorId(@PathVariable Long id) {
-        ClasseDto classe = classeService.buscarPorId(id);
+    public ResponseEntity<ClasseResponseDto> buscarAtorPorId(@PathVariable Long id) {
+        ClasseResponseDto classe = classeMapper.toDto(classeService.buscarPorId(id));
         return ResponseEntity.ok().body(classe);
     }
 

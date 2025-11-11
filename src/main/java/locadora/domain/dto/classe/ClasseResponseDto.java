@@ -1,13 +1,12 @@
-package locadora.domain.dto;
+package locadora.domain.dto.classe;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public record ClasseDto(
+public record ClasseResponseDto(
     Long id,
     String nome,
     Double valor,
-    LocalDate prazoDevolucao,
-    List<Long> titulos
+    LocalDate prazoDevolucao
 ) {
 }

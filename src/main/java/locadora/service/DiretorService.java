@@ -1,10 +1,10 @@
 package locadora.service;
 
-import locadora.domain.Ator;
 import locadora.domain.Diretor;
-import locadora.domain.dto.DiretorDto;
+import locadora.domain.dto.diretor.DiretorRequestDto;
+import locadora.domain.dto.diretor.DiretorResponseDto;
+import locadora.handler.exceptions.EntidadeNaoEncontradaException;
 import locadora.mapper.DiretorMapper;
-import locadora.repository.DiretorRepository;
 import locadora.repository.DiretorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,22 +18,19 @@ public class DiretorService {
     private final DiretorRepository repository;
     private final DiretorMapper mapper;
 
-    public List<DiretorDto> listar(){
+    public List<DiretorResponseDto> listar(){
         return mapper.toDtoList(repository.findAll());
     }
 
-    public void salvar(DiretorDto diretor){
+    public void salvar(DiretorRequestDto diretor){
         repository.save(mapper.toEntity(diretor));
     }
 
-    public void atualizar(DiretorDto diretor){
-        if(diretor.id() == null) {
-            throw new RuntimeException("Id do Diretor não pode ser nulo");
-        }
+    public void atualizar(Long id,DiretorRequestDto diretor){
 
-        Diretor DiretorAtualizado = repository.findById(diretor.id()).orElseThrow(() -> new RuntimeException("Diretor não encontrado"));
-
-        repository.save(mapper.toEntity(diretor));
+        Diretor diretorEncontrado = buscarPorId(id);
+        mapper.updateEntity(diretor,diretorEncontrado);
+        repository.save(diretorEncontrado);
     }
 
     public void deletar(Long id){
@@ -43,8 +40,8 @@ public class DiretorService {
 
 
 
-    public DiretorDto buscarPorId(Long id) {
-        return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Diretor não encontrado")));  // Lança uma exceção se não encontrar o ator
+    public Diretor buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Diretor não encontrado"));  // Lança uma exceção se não encontrar o ator
     }
 }

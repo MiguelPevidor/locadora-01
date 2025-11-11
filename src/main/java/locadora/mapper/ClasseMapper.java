@@ -1,22 +1,23 @@
 package locadora.mapper;
 
-import locadora.domain.Ator;
 import locadora.domain.Classe;
-import locadora.domain.dto.AtorDto;
-import locadora.domain.dto.ClasseDto;
+import locadora.domain.dto.classe.ClasseRequestDto;
+import locadora.domain.dto.classe.ClasseResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ClasseMapper extends UtilMapper{
 
-    @Mapping(target="titulos", source="titulos", qualifiedByName="tituloIdList")
-    ClasseDto toDto(Classe entity);
+    ClasseResponseDto toDto(Classe entity);
 
     @Mapping(target="titulos", ignore = true)
-    Classe toEntity(ClasseDto dto);
+    Classe toEntity(ClasseRequestDto dto);
 
-    List<ClasseDto> toDtoList(List<Classe> entities);
+    List<ClasseResponseDto> toDtoList(List<Classe> entities);
+
+    void updateEntity(ClasseRequestDto dto, @MappingTarget Classe entity);
 }

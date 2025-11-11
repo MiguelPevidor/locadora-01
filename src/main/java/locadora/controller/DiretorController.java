@@ -1,10 +1,10 @@
 package locadora.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import locadora.domain.Ator;
-import locadora.domain.Diretor;
-import locadora.domain.dto.DiretorDto;
-import locadora.service.DiretorService;
+import jakarta.validation.Valid;
+import locadora.domain.dto.diretor.DiretorRequestDto;
+import locadora.domain.dto.diretor.DiretorResponseDto;
+import locadora.mapper.DiretorMapper;
 import locadora.service.DiretorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 )
 public class DiretorController {
     private final DiretorService diretorService;
+    private final DiretorMapper diretorMapper;
 
     @GetMapping("/listarDiretores")
     public ResponseEntity<?> listarDiretores(){
@@ -27,14 +28,14 @@ public class DiretorController {
     }
 
     @PostMapping("/salvarDiretor")
-    public ResponseEntity<?> salvarDiretor(@RequestBody DiretorDto diretor){
+    public ResponseEntity<?> salvarDiretor(@RequestBody @Valid DiretorRequestDto diretor){
         diretorService.salvar(diretor);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/editarDiretor")
-    public ResponseEntity<?> atualizarDiretor(@RequestBody DiretorDto diretor){
-        diretorService.atualizar(diretor);
+    @PutMapping("{id}/editarDiretor")
+    public ResponseEntity<?> atualizarDiretor(@PathVariable Long id,@RequestBody @Valid DiretorRequestDto diretor){
+        diretorService.atualizar(id, diretor);
         return ResponseEntity.ok().build();
     }
 
@@ -45,8 +46,8 @@ public class DiretorController {
     }
 
     @GetMapping("/buscarDiretor/{id}")
-    public ResponseEntity<DiretorDto> buscarAtorPorId(@PathVariable Long id) {
-        DiretorDto diretor = diretorService.buscarPorId(id);
+    public ResponseEntity<DiretorResponseDto> buscarAtorPorId(@PathVariable Long id) {
+        DiretorResponseDto diretor = diretorMapper.toDto(diretorService.buscarPorId(id));
         return ResponseEntity.ok().body(diretor);
     }
 

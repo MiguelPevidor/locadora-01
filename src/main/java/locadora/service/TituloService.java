@@ -1,8 +1,14 @@
 package locadora.service;
 
+import locadora.domain.Ator;
+import locadora.domain.Classe;
+import locadora.domain.Diretor;
 import locadora.domain.Titulo;
-import locadora.domain.dto.TituloDto;
+import locadora.domain.dto.titulo.TituloRequestDto;
+import locadora.domain.dto.titulo.TituloResponseDto;
+import locadora.handler.exceptions.EntidadeNaoEncontradaException;
 import locadora.mapper.TituloMapper;
+import locadora.repository.AtorRepository;
 import locadora.repository.TituloRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,23 +21,62 @@ public class TituloService {
 
     private final TituloRepository repository;
     private final TituloMapper mapper;
+    private final AtorRepository atorRepository;
+    private final DiretorService diretorService;
+    private final ClasseService classeService;
 
-    public List<TituloDto> listar(){
+
+    public List<TituloResponseDto> listar(){
         return mapper.toDtoList(repository.findAll());
     }
 
-    public void salvar(TituloDto titulo){
+    public void salvar(TituloRequestDto dto){
+        Titulo titulo = mapper.toEntity(dto);
+
+        //buscar os atores
+        List<Ator> atores = buscarAtoresPorIds(dto.atores());
+        //buscar o diretor
+        Diretor diretor = diretorService.buscarPorId(dto.diretor());
+        //buscar a classe
+        Classe classe = classeService.buscarPorId(dto.classe());
+
+        //vincular todos ao titulo
+        titulo.setAtores(atores);
+        titulo.setDiretor(diretor);
+        titulo.setClasse(classe);
+
+        repository.save(titulo);
+    }
+
+    public void atualizar(Long id, TituloRequestDto titulo){
+
+        Titulo tituloEncontrado = buscarPorId(id);
+
+        //buscar os atores
+        List<Ator> atores = buscarAtoresPorIds(titulo.atores());
+        //buscar o diretor
+        Diretor diretor = diretorService.buscarPorId(titulo.diretor());
+        //buscar a classe
+        Classe classe = classeService.buscarPorId(titulo.classe());
+
+        Titulo tituloAtualizado = mapper.toEntity(titulo);
+        tituloAtualizado.setAtores(atores);
+        tituloAtualizado.setDiretor(diretor);
+        tituloAtualizado.setClasse(classe);
+
+        mapper.updateEntity(tituloAtualizado, tituloEncontrado);
+
         repository.save(mapper.toEntity(titulo));
     }
 
-    public void atualizar(TituloDto titulo){
-        if(titulo.id() == null) {
-            throw new RuntimeException("Id do titulo não pode ser nulo");
+    private List<Ator> buscarAtoresPorIds(List<Long> ids){
+        List<Ator> atoresEncontrados = atorRepository.findAllById(ids);
+
+        if (atoresEncontrados.size() != ids.size()) {
+            throw new EntidadeNaoEncontradaException("Um ou mais atores não foram encontrados");
         }
 
-        Titulo tituloAtualizado = repository.findById(titulo.id()).orElseThrow(() -> new RuntimeException("titulo não encontrado"));
-
-        repository.save(mapper.toEntity(titulo));
+        return atoresEncontrados;
     }
 
     public void deletar(Long id){
@@ -39,8 +84,18 @@ public class TituloService {
     }
 
 
-    public TituloDto buscarPorId(Long id) {
-        return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("titulo não encontrado")));  // Lança uma exceção se não encontrar o titulo
+    public Titulo buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("titulo não encontrado"));  // Lança uma exceção se não encontrar o titulo
+    }
+
+    public List<Titulo> buscarTituloPorIds(List<Long> titulos) {
+        List<Titulo> titulosEncontrados = repository.findAllById(titulos);
+
+        if (titulosEncontrados.size() != titulos.size()) {
+            throw new EntidadeNaoEncontradaException("Um ou mais titulos não foram encontrados");
+        }
+
+        return titulosEncontrados;
     }
 }

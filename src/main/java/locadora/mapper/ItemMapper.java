@@ -1,17 +1,22 @@
 package locadora.mapper;
 
-import locadora.domain.Diretor;
 import locadora.domain.Item;
-import locadora.domain.dto.DiretorDto;
-import locadora.domain.dto.ItemDto;
+import locadora.domain.dto.item.ItemRequestDto;
+import locadora.domain.dto.item.ItemResponseDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
-    ItemDto toDto(Item entity);
+    ItemResponseDto toDto(Item entity);
 
-    Item toEntity(ItemDto dto);
+    @Mapping(target = "titulo", ignore = true)
+    Item toEntity(ItemRequestDto dto);
 
-    List<ItemDto> toDtoList(List<Item> entities);
+
+    List<ItemResponseDto> toDtoList(List<Item> entities);
+
+    void updateEntity(Item dto, @MappingTarget Item entity);
 }

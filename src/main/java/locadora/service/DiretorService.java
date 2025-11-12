@@ -4,6 +4,7 @@ import locadora.domain.Diretor;
 import locadora.domain.dto.diretor.DiretorRequestDto;
 import locadora.domain.dto.diretor.DiretorResponseDto;
 import locadora.handler.exceptions.EntidadeNaoEncontradaException;
+import locadora.handler.exceptions.EntidadeNaoPodeSerExcluidaException;
 import locadora.mapper.DiretorMapper;
 import locadora.repository.DiretorRepository;
 import lombok.AllArgsConstructor;
@@ -34,10 +35,23 @@ public class DiretorService {
     }
 
     public void deletar(Long id){
+        if(isDiretorRelacionadoATitulos(id)) {
+            throw new EntidadeNaoPodeSerExcluidaException("Não é possível deletar o diretor pois ele está relacionado a um ou mais títulos.");
+        }
         repository.deleteById(id);
     }
 
+    private boolean isDiretorRelacionadoATitulos(Long id) {
+        Diretor diretor = buscarPorId(id);
 
+        if(!diretor.getTitulos().isEmpty()) {
+            //Classe está relacionado a títulos pois a lista de títulos não está vazia
+            return true;
+        }
+
+        //classe não está relacionado a nenhum título
+        return false;
+    }
 
 
     public Diretor buscarPorId(Long id) {

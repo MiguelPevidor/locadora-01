@@ -4,6 +4,7 @@ import locadora.domain.Classe;
 import locadora.domain.dto.classe.ClasseRequestDto;
 import locadora.domain.dto.classe.ClasseResponseDto;
 import locadora.handler.exceptions.EntidadeNaoEncontradaException;
+import locadora.handler.exceptions.EntidadeNaoPodeSerExcluidaException;
 import locadora.mapper.ClasseMapper;
 import locadora.repository.ClasseRepository;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,22 @@ public class ClasseService {
     }
 
     public void deletar(Long id){
+        if(isClasseRelacionadoATitulos(id)) {
+            throw new EntidadeNaoPodeSerExcluidaException("Não é possível deletar a classe pois ela está relacionada a um ou mais títulos.");
+        }
         repository.deleteById(id);
+    }
+
+    private boolean isClasseRelacionadoATitulos(Long id) {
+        Classe classe = buscarPorId(id);
+
+        if(!classe.getTitulos().isEmpty()) {
+            //Classe está relacionado a títulos pois a lista de títulos não está vazia
+            return true;
+        }
+
+        //classe não está relacionado a nenhum título
+        return false;
     }
 
 

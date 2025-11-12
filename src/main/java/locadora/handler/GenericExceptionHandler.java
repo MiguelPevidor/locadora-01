@@ -2,6 +2,7 @@ package locadora.handler;
 
 import locadora.domain.dto.GenericExceptionDto;
 import locadora.handler.exceptions.EntidadeNaoEncontradaException;
+import locadora.handler.exceptions.EntidadeNaoPodeSerExcluidaException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,12 @@ public class GenericExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GenericExceptionDto> handleException(Exception exception) {
+        System.out.println(exception.getMessage());
+        return ResponseEntity.badRequest().body(new GenericExceptionDto(exception.getMessage()));
+    }
+
+    @ExceptionHandler(EntidadeNaoPodeSerExcluidaException.class)
+    public ResponseEntity<GenericExceptionDto> handleExclusaoNaoPermitida(Exception exception) {
         System.out.println(exception.getMessage());
         return ResponseEntity.badRequest().body(new GenericExceptionDto(exception.getMessage()));
     }

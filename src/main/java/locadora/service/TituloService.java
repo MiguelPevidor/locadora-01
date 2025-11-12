@@ -7,6 +7,7 @@ import locadora.domain.Titulo;
 import locadora.domain.dto.titulo.TituloRequestDto;
 import locadora.domain.dto.titulo.TituloResponseDto;
 import locadora.handler.exceptions.EntidadeNaoEncontradaException;
+import locadora.handler.exceptions.EntidadeNaoPodeSerExcluidaException;
 import locadora.mapper.TituloMapper;
 import locadora.repository.AtorRepository;
 import locadora.repository.TituloRepository;
@@ -80,7 +81,22 @@ public class TituloService {
     }
 
     public void deletar(Long id){
+
+        if(tituloPossuiItens(id)) {
+            throw new EntidadeNaoPodeSerExcluidaException("Não é possível deletar o título pois ele possuí um ou mais itens.");
+        }
         repository.deleteById(id);
+    }
+
+    private boolean tituloPossuiItens(Long id) {
+        Titulo titulo = buscarPorId(id);
+
+        if(!titulo.getItens().isEmpty()) {
+            //Titulo possui itens pois a lista de itens não está vazia
+            return true;
+        }
+
+        return false;
     }
 
 

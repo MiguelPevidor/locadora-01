@@ -1,10 +1,10 @@
 package locadora.service;
 
 import locadora.domain.Ator;
-import locadora.domain.Titulo;
 import locadora.domain.dto.ator.AtorRequestDto;
 import locadora.domain.dto.ator.AtorResponseDto;
 import locadora.handler.exceptions.EntidadeNaoEncontradaException;
+import locadora.handler.exceptions.EntidadeNaoPodeSerExcluidaException;
 import locadora.mapper.AtorMapper;
 import locadora.repository.AtorRepository;
 import lombok.AllArgsConstructor;
@@ -40,7 +40,24 @@ public class AtorService {
     }
 
     public void deletar(Long id){
+
+        if(isAtorRelacionadoATitulos(id)){
+            throw new EntidadeNaoPodeSerExcluidaException("Ator não pode ser deletado pois está relacionado a títulos");
+        }
+        
         repository.deleteById(id);
+    }
+    
+    private boolean isAtorRelacionadoATitulos(Long atorId) {
+        Ator ator = buscarPorId(atorId);
+
+        if(!ator.getTitulos().isEmpty()) {
+            //ator está relacionado a títulos pois a lista de títulos não está vazia
+            return true;
+        }
+
+        //ator não está relacionado a títulos
+        return false;
     }
 
 

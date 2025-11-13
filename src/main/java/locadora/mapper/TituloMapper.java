@@ -8,23 +8,25 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
+@Mapper(componentModel = "spring", uses = {ItemMapper.class})
+public interface TituloMapper {
 
-@Mapper(componentModel = "spring", uses =  {ItemMapper.class})
-public interface TituloMapper extends UtilMapper {
-
+    // Mapeia o DTO (TituloRequestDto) para a entidade Titulo
     @Mapping(target = "atores", ignore = true)
     @Mapping(target = "diretor", ignore = true)
     @Mapping(target = "classe", ignore = true)
+    @Mapping(target = "id", ignore = true) // Ignora o mapeamento do ID, já que não deve ser alterado
     Titulo toEntity(TituloRequestDto dto);
 
-//    @Mapping(target = "atores", qualifiedByName = "mapAtoresToIdList")
-//    @Mapping(target = "diretor", source = "diretor", qualifiedByName = "mapDiretorToId")
-//    @Mapping(target = "classe", source = "classe", qualifiedByName = "mapClasseToId")
+    // Mapeia a entidade Titulo para o DTO TituloResponseDto
     TituloResponseDto toDto(Titulo entity);
 
+    // Mapeia uma lista de Titulo para uma lista de TituloResponseDto
     List<TituloResponseDto> toDtoList(List<Titulo> entities);
 
+    // Atualiza os campos da entidade Titulo com os dados do DTO
+    @Mapping(target = "id", ignore = true) // Ignora a atualização do campo ID
     void updateEntity(Titulo dto, @MappingTarget Titulo entity);
-
-
 }
+
+

@@ -49,26 +49,34 @@ public class TituloService {
         repository.save(titulo);
     }
 
-    public void atualizar(Long id, TituloRequestDto titulo){
+    public void atualizar(Long id, TituloRequestDto titulo) {
 
+        // Buscar a entidade Titulo existente
         Titulo tituloEncontrado = buscarPorId(id);
 
-        //buscar os atores
+        // Buscar os atores
         List<Ator> atores = buscarAtoresPorIds(titulo.atores());
-        //buscar o diretor
+        // Buscar o diretor
         Diretor diretor = diretorService.buscarPorId(titulo.diretor());
-        //buscar a classe
+        // Buscar a classe
         Classe classe = classeService.buscarPorId(titulo.classe());
 
-        Titulo tituloAtualizado = mapper.toEntity(titulo);
+        // Mapeie o DTO TituloRequestDto para uma entidade Titulo
+        Titulo tituloAtualizado = mapper.toEntity(titulo); // Mapeamento do DTO para a entidade Titulo
+
+        // Atualiza os dados da entidade encontrada com os dados do DTO
         tituloAtualizado.setAtores(atores);
         tituloAtualizado.setDiretor(diretor);
         tituloAtualizado.setClasse(classe);
 
+        // Atualize a entidade encontrada com os novos dados
         mapper.updateEntity(tituloAtualizado, tituloEncontrado);
 
-        repository.save(mapper.toEntity(titulo));
+        // Salve a entidade atualizada, preservando o ID
+        repository.save(tituloEncontrado);
     }
+
+
 
     private List<Ator> buscarAtoresPorIds(List<Long> ids){
         List<Ator> atoresEncontrados = atorRepository.findAllById(ids);

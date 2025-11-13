@@ -36,7 +36,7 @@ public class TituloController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/editarTitulo")
+    @PutMapping("/{id}/editarTitulo")
     public ResponseEntity<?> atualizarTitulo(@PathVariable Long id,@RequestBody @Valid TituloRequestDto titulo){
         tituloService.atualizar(id,titulo);
         return ResponseEntity.ok().build();

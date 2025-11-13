@@ -33,7 +33,7 @@ public class ClasseController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/editarClasse")
+    @PutMapping("/{id}/editarClasse")
     public ResponseEntity<?> atualizarClasse(@PathVariable Long id,@RequestBody @Valid ClasseRequestDto classe){
         classeService.atualizar(id,classe);
         return ResponseEntity.ok().build();

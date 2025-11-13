@@ -40,7 +40,9 @@ public class ItemService {
         Titulo titulo = tituloService.buscarPorId(item.titulo());
 
         Item entity = mapper.toEntity(item);
+        entity.setId(id);
         entity.setTitulo(titulo);
+
 
         mapper.updateEntity(entity,itemEncontrado);
         repository.save(itemEncontrado);

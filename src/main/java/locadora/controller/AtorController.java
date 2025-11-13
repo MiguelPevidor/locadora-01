@@ -35,7 +35,7 @@ public class AtorController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/editarAtor")
+    @PutMapping("/{id}/editarAtor")
     public ResponseEntity<?> atualizarAtor(@PathVariable Long id,@RequestBody @Valid AtorRequestDto ator){
         atorService.atualizar(id,ator);
         return ResponseEntity.ok().build();

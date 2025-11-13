@@ -35,7 +35,7 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/editarItem")
+    @PutMapping("/{id}/editarItem")
     public ResponseEntity<?> atualizarItem(@PathVariable Long id,@RequestBody @Valid ItemRequestDto item){
         itemService.atualizar(id,item);
         return ResponseEntity.ok().build();

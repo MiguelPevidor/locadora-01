@@ -33,7 +33,7 @@ public class DiretorController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/editarDiretor")
+    @PutMapping("/{id}/editarDiretor")
     public ResponseEntity<?> atualizarDiretor(@PathVariable Long id,@RequestBody @Valid DiretorRequestDto diretor){
         diretorService.atualizar(id, diretor);
         return ResponseEntity.ok().build();

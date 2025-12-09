@@ -40,11 +40,10 @@ public class SocioService {
         repository.save(entity);
     }
 
-    public void atualizar(Long id,SocioRequestDto socio){
-
-        buscarPorId(id);
-        Socio entity = mapper.toEntity(socio);
-        repository.save(entity);
+    public void atualizar(Long id, SocioRequestDto dto) {
+        Socio socio = buscarPorId(id);
+        mapper.updateEntity(dto, socio);
+        repository.save(socio);
     }
 
     public void inativar(Long id){
@@ -72,6 +71,8 @@ public class SocioService {
                 break;
             }
         }
+
+        repository.save(socio);
 
     }
 

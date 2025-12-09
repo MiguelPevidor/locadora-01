@@ -31,6 +31,12 @@ public class SocioService {
         }
         Socio entity = mapper.toEntity(socio);
         entity.setEstahAtivo(true);
+        if(entity.getDependentes() != null) {
+            for (Dependente dependente : entity.getDependentes()) {
+                dependente.setEstahAtivo(true);
+                dependente.setResponsavel(entity);
+            }
+        }
         repository.save(entity);
     }
 
@@ -48,6 +54,7 @@ public class SocioService {
         for(Dependente dependente: socio.getDependentes()){
             dependente.setEstahAtivo(false);
         }
+        repository.save(socio);
 
     }
 

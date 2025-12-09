@@ -46,6 +46,7 @@ public class DependenteService {
     public void inativar(Long id){
         Dependente dependente = buscarPorId(id);
         dependente.setEstahAtivo(false);
+        repository.save(dependente);
     }
 
     public void reativar(Long id){

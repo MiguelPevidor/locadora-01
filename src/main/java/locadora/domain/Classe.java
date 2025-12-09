@@ -21,7 +21,7 @@ public class Classe {
 
     private String nome;
     private Double valor;
-    private LocalDate prazoDevolucao;
+    private int prazoDevolucao;
 
     @OneToMany(mappedBy = "classe" )
     private List<Titulo> titulos = new ArrayList<>();

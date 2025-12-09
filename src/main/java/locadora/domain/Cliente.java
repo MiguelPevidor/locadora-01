@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter@Setter
@@ -14,6 +15,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String numInscricao;
 
     private String nome;
@@ -24,4 +26,6 @@ public class Cliente {
 
     private boolean estahAtivo;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<Locacao> locacoes;
 }

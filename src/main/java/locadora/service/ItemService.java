@@ -1,5 +1,6 @@
 package locadora.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import locadora.domain.Item;
 import locadora.domain.Titulo;
 import locadora.domain.dto.item.ItemRequestDto;
@@ -56,5 +57,9 @@ public class ItemService {
     public Item buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Item não encontrado"));  // Lança uma exceção se não encontrar o Item
+    }
+
+    public Item findByNumSerie(String numSerie) {
+        return repository.findByNumSerie(numSerie).orElseThrow(() -> new EntityNotFoundException("Item não encontrado com este número de série."));
     }
 }

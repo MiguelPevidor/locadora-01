@@ -17,7 +17,7 @@ public class Socio extends Cliente{
     private String endereco;
     private String telefone;
 
-    @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dependente> dependentes;
 
 

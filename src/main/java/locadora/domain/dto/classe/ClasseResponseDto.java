@@ -7,6 +7,6 @@ public record ClasseResponseDto(
     Long id,
     String nome,
     Double valor,
-    LocalDate prazoDevolucao
+    int prazoDevolucao
 ) {
 }

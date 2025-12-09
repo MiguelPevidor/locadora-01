@@ -1,0 +1,54 @@
+package locadora.controller;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import locadora.domain.Locacao;
+import locadora.domain.dto.ator.AtorRequestDto;
+import locadora.domain.dto.locacao.LocacaoRequestDto;
+import locadora.domain.dto.locacao.LocacaoResponseDto;
+import locadora.mapper.LocacaoMapper;
+import locadora.repository.LocacaoRepository;
+import locadora.service.LocacaoService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/locacoes")
+@AllArgsConstructor
+@Tag(
+        name = "Locação",
+        description = "Endpoints para gerenciamento das Locações"
+)
+public class LocacaoController {
+
+    private LocacaoService service;
+    private LocacaoMapper mapper;
+
+
+    @PostMapping
+    public ResponseEntity<LocacaoResponseDto> salvar(LocacaoRequestDto dto){
+        service.salvar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/{id}/editarLocacao")
+    public ResponseEntity<?> atualizarlocacao(@PathVariable Long id, @RequestBody @Valid LocacaoRequestDto dto){
+        service.atualizar(id,dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{numSerie}/devolver")
+    public ResponseEntity<LocacaoResponseDto> atualizarlocacao(@PathVariable String numSerie){
+        Locacao locacao = service.efetuarDevolucao(numSerie);
+        return ResponseEntity.ok().body(mapper.toDto(locacao));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletarLocacao(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.ok().build();
+    }
+
+}

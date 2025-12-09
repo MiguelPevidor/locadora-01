@@ -1,8 +1,8 @@
-package locadora.domain.dto.dependente;
+package locadora.domain.dto.cliente;
 
 import java.time.LocalDate;
 
-public record DependenteResponseDto(
+public record ClienteResponseDto (
         Long id,
         String numInscricao,
         String nome,
@@ -12,5 +12,5 @@ public record DependenteResponseDto(
         String cpf,
         String endereco,
         String telefone
-) {
+){
 }

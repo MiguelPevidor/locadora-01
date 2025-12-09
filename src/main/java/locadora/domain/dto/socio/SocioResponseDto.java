@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record SocioResponseDto(
+        Long id,
         String numInscricao,
         String nome,
         LocalDate dataNascimento,

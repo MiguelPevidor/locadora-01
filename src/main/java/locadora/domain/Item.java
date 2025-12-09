@@ -13,6 +13,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String numSerie;
 
     private LocalDate dtAquisicao;
@@ -22,4 +23,6 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titulo_id")
     private Titulo titulo;
+
+
 }

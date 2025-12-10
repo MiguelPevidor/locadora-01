@@ -8,9 +8,6 @@ public record DependenteResponseDto(
         String nome,
         LocalDate dataNascimento,
         String sexo,
-        boolean estahAtivo,
-        String cpf,
-        String endereco,
-        String telefone
+        boolean estahAtivo
 ) {
 }

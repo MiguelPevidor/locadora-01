@@ -19,5 +19,6 @@ public interface DependenteMapper {
     List<DependenteResponseDto> toDtoList(List<Dependente> entities);
 
     @Mapping(target = "id", ignore = true)
-    void updateEntity(DependenteRequestDto dto, @MappingTarget Dependente entity);
+    @Mapping(target = "responsavel", ignore = true)
+    Dependente updateEntity(DependenteRequestDto dto, @MappingTarget Dependente entity);
 }

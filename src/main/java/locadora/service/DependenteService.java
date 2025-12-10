@@ -36,10 +36,10 @@ public class DependenteService {
         repository.save(entity);
     }
 
-    public void atualizar(Long id,DependenteRequestDto dependente){
+    public void atualizar(Long id,DependenteRequestDto dto){
 
-        buscarPorId(id);
-        Dependente entity = mapper.toEntity(dependente);
+        Dependente dependente = buscarPorId(id);
+        Dependente entity = mapper.updateEntity(dto,dependente);
         repository.save(entity);
     }
 

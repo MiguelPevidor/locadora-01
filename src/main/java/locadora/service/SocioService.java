@@ -43,6 +43,13 @@ public class SocioService {
     public void atualizar(Long id, SocioRequestDto dto) {
         Socio socio = buscarPorId(id);
         mapper.updateEntity(dto, socio);
+
+        if (socio.getDependentes() != null) {
+            socio.getDependentes().forEach(dependente -> {
+                // Garante que o dependente aponta para o sócio que está sendo salvo
+                dependente.setResponsavel(socio);
+            });
+        }
         repository.save(socio);
     }
 

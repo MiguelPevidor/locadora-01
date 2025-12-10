@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/locacoes")
 @AllArgsConstructor
@@ -23,9 +25,14 @@ import org.springframework.web.bind.annotation.*;
 )
 public class LocacaoController {
 
-    private LocacaoService service;
-    private LocacaoMapper mapper;
+    private final LocacaoService service;
+    private final LocacaoMapper mapper;
 
+    @GetMapping("listarLocacoes")
+    public ResponseEntity<List<LocacaoResponseDto>> listar(){
+        List<Locacao> locacoes = service.listar();
+        return ResponseEntity.ok().body(mapper.toDtoList(locacoes));
+    }
 
     @PostMapping
     public ResponseEntity<LocacaoResponseDto> salvar(LocacaoRequestDto dto){

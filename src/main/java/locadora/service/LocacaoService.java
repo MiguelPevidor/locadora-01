@@ -18,15 +18,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class LocacaoService {
 
-    private LocacaoRepository locacaoRepository;
-    private ClienteService clienteService;
-    private ItemService itemService;
-    private LocacaoMapper mapper;
+    private final LocacaoRepository locacaoRepository;
+    private final ClienteService clienteService;
+    private final ItemService itemService;
+    private final LocacaoMapper mapper;
 
     public void salvar(LocacaoRequestDto dto) {
         Cliente cliente = clienteService.buscarPorId(dto.idCliente());
@@ -119,5 +120,9 @@ public class LocacaoService {
     private double calcularMulta(Double valorOriginal, long diasAtraso) {
         // Exemplo: Multa de 100% do valor da locação por dia de atraso
         return valorOriginal * diasAtraso;
+    }
+
+    public List<Locacao> listar() {
+        return locacaoRepository.findAll();
     }
 }

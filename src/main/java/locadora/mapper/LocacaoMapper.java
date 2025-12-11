@@ -1,9 +1,6 @@
 package locadora.mapper;
 
-import locadora.domain.Ator;
 import locadora.domain.Locacao;
-import locadora.domain.Titulo;
-import locadora.domain.dto.ator.AtorResponseDto;
 import locadora.domain.dto.locacao.LocacaoRequestDto;
 import locadora.domain.dto.locacao.LocacaoResponseDto;
 import org.mapstruct.Mapper;
@@ -16,8 +13,15 @@ import java.util.List;
 public interface LocacaoMapper {
     void updateEntity(LocacaoRequestDto dto, @MappingTarget Locacao entity);
 
-    LocacaoResponseDto toDto(Locacao entity);
+    @Mapping(target = "idCliente", source = "cliente.id")
+    @Mapping(target = "nomeCliente", source = "cliente.nome")
+    @Mapping(target = "numInscricaoCliente", source = "cliente.numInscricao")
 
+    @Mapping(target = "idItem", source = "item.id")
+    @Mapping(target = "tituloItem", source = "item.titulo.nome")
+    @Mapping(target = "numSerieItem", source = "item.numSerie")
+    @Mapping(target = "tipoItem", source = "item.tipoItem")
+    LocacaoResponseDto toDto(Locacao entity);
 
     List<LocacaoResponseDto> toDtoList(List<Locacao> entities);
 }

@@ -125,4 +125,9 @@ public class LocacaoService {
     public List<Locacao> listar() {
         return locacaoRepository.findAll();
     }
+
+    public List<LocacaoResponseDto> listarPendentes() {
+        return mapper.toDtoList(locacaoRepository.findAllByDtDevolucaoEfetivaIsNull());
+    }
+
 }

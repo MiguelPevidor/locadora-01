@@ -57,6 +57,7 @@ public class DependenteService {
         }else{
             throw new BusinessException("Não foi possivel reativar esse dependente, seu responsavel esta Inativo");
         }
+        repository.save(dependente);
     }
 
 

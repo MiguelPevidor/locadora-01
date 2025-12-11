@@ -34,8 +34,8 @@ public class LocacaoController {
         return ResponseEntity.ok().body(mapper.toDtoList(locacoes));
     }
 
-    @PostMapping
-    public ResponseEntity<LocacaoResponseDto> salvar(LocacaoRequestDto dto){
+    @PostMapping("/salvarLocacao")
+    public ResponseEntity<LocacaoResponseDto> salvar(@RequestBody LocacaoRequestDto dto){
         service.salvar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -57,5 +57,17 @@ public class LocacaoController {
         service.deletar(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/buscarLocacao/{id}")
+    public ResponseEntity<LocacaoResponseDto> buscarPorId(@PathVariable Long id) {
+        Locacao locacao = service.buscarPorId(id);
+        return ResponseEntity.ok(mapper.toDto(locacao));
+    }
+
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<LocacaoResponseDto>> listarPendentes(){
+        return ResponseEntity.ok().body(service.listarPendentes());
+    }
+
 
 }

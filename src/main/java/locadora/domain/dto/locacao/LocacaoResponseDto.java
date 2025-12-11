@@ -3,18 +3,20 @@ package locadora.domain.dto.locacao;
 import java.time.LocalDate;
 
 public record LocacaoResponseDto(
-         Long id,
+        Long id,
+        LocalDate dtLocacao,
+        LocalDate dtDevolucaoPrevista,
+        LocalDate dtDevolucaoEfetiva,
+        Double valorCobrado,
+        Double multaCobrada,
 
-         LocalDate dtLocacao,
+        Long idCliente,
+        String nomeCliente,
+        String numInscricaoCliente,
 
-         LocalDate dtDevolucaoPrevista,
-
-         LocalDate dtDevolucaoEfetiva,
-
-         Double valorCobrado,
-
-         Double multaCobrada
-
-
+        Long idItem,
+        String tituloItem,
+        String numSerieItem,
+        String tipoItem
 ) {
 }

@@ -10,6 +10,9 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
+
+    @Mapping(source = "titulo.id", target = "tituloId")
+    @Mapping(source = "titulo.nome", target = "nomeTitulo")
     ItemResponseDto toDto(Item entity);
 
     @Mapping(target = "titulo", ignore = true)

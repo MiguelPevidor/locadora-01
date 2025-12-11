@@ -6,6 +6,9 @@ public record ItemResponseDto(
     Long id,
     String numSerie,
     LocalDate dtAquisicao,
-    String tipoItem
+    String tipoItem,
+    Long tituloId,
+    String nomeTitulo
+
 ){
 }
